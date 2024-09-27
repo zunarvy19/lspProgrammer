@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
+    <title>Invoice Resto Bunda</title>
     <style>
         body {
             font-family: 'Arial, sans-serif';
@@ -39,6 +39,7 @@
         <h2>Detail Pesanan</h2>
         <p><strong>ID Order:</strong> {{ $dataOrders->id }}</p>
         <p><strong>Nama Pelanggan:</strong> {{ $dataOrders->user ? $dataOrders->user->name : 'Nama tidak ditemukan' }}</p>
+        <p><strong>Metode Order:</strong> {{ $dataOrders->metode_order }}</p>
         <p><strong>Status:</strong> {{ $dataOrders->status_order }}</p>
         <p><strong>Total Biaya:</strong> Rp {{ number_format($dataOrders->total_biaya, 0, ',', '.') }}</p>
         <p><strong>Tanggal Order:</strong>  {{ \Carbon\Carbon::parse($dataOrders->tanggal_order)->locale('id')->translatedFormat('l, j F Y') }}</p>

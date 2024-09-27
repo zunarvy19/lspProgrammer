@@ -12,113 +12,129 @@
             @csrf
             <div class="shadow-md px-8 pt-6 pb-8 mb-4 flex flex-col mx-auto md:flex md:flex-col rounded-2xl bg-white">
                 
-<!-- Section: Makanan Utama -->
-<div>
-    <h2 class="text-xl font-bold mb-4">Makanan Utama</h2>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Makanan</label>
-            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="main_course" name="menu[main_course][id]" required>
-                <option value="">Pilih Makanan Utama</option>
-                @foreach ($menus->where('id_products', 1) as $menu)
-                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Makanan</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="main_course_price" name="menu[main_course][price]" type="text" readonly>
-        </div>
-    </div>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="main_course_qty" name="menu[main_course][quantity]" type="number" min="1" value="1">
-        </div>
-    </div>
-</div>
-
-<!-- Section: Minuman -->
-<div>
-    <h2 class="text-xl font-bold mb-4">Minuman</h2>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Minuman</label>
-            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="drink" name="menu[drink][id]" required>
-                <option value="">Pilih Minuman</option>
-                @foreach ($menus->where('id_products', 3) as $menu)
-                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Minuman</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="drink_price" name="menu[drink][price]" type="text" readonly>
-        </div>
-    </div>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="drink_qty" name="menu[drink][quantity]" type="number" min="1" value="1">
-        </div>
-    </div>
-</div>
-
-<!-- Section: Appetizer -->
-<div>
-    <h2 class="text-xl font-bold mb-4">Appetizer</h2>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Appetizer</label>
-            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="appetizer" name="menu[appetizer][id]" required>
-                <option value="">Pilih Appetizer</option>
-                @foreach ($menus->where('id_products', 2) as $menu)
-                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Appetizer</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="appetizer_price" name="menu[appetizer][price]" type="text" readonly>
-        </div>
-    </div>
-    <div class="md:flex mb-6">
-        <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="appetizer_qty" name="menu[appetizer][quantity]" type="number" min="1" value="1">
-        </div>
-    </div>
-
-     <!-- Section: Total Harga -->
-     <div class="mt-6">
-        <h2 class="text-xl font-bold mb-4">Total Harga</h2>
-        <div class="md:flex mb-6">
-            <div class="md:w-1/2 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Total</label>
-                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="total_price" name="total_price" type="text" readonly>
-            </div>
-
-            <div class="md:w-1/2 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Metode Pembayaran</label>
-                <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="metode_pembayaran" name="metode_order" required>
-                    <option value="">Pilih Metode Pembayaran</option>
-                    <option value="tunai">Tunai</option>
-                    <option value="non-tunai">Non Tunai</option>
-                </select>
-            </div>                        
-        </div>                     
-</div>
-</div>
-
-                <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded-lg">Submit Order</button>
+                <!-- Section: Makanan Utama -->
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Makanan Utama</h2>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Makanan</label>
+                            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="main_course" name="menu[main_course][id]" required>
+                                <option value="">Pilih Makanan Utama</option>
+                                @foreach ($menus->where('id_products', 1) as $menu)
+                                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Makanan</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="main_course_price" name="menu[main_course][price]" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="main_course_qty" name="menu[main_course][quantity]" type="number" min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Section: Minuman -->
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Minuman</h2>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Minuman</label>
+                            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="drink" name="menu[drink][id]" required>
+                                <option value="">Pilih Minuman</option>
+                                @foreach ($menus->where('id_products', 3) as $menu)
+                                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Minuman</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="drink_price" name="menu[drink][price]" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="drink_qty" name="menu[drink][quantity]" type="number" min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Section: Appetizer -->
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Appetizer</h2>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Appetizer</label>
+                            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="appetizer" name="menu[appetizer][id]" required>
+                                <option value="">Pilih Appetizer</option>
+                                @foreach ($menus->where('id_products', 2) as $menu)
+                                    <option value="{{ $menu->id }}" data-price="{{ $menu->harga_menu }}">{{ $menu->nama_menu }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Appetizer</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3" id="appetizer_price" name="menu[appetizer][price]" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Jumlah</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="appetizer_qty" name="menu[appetizer][quantity]" type="number" min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Section: Total Harga -->
+                <div class="mt-6">
+                    <h2 class="text-xl font-bold mb-4">Total Harga</h2>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Total</label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4" id="total_price" name="total_price" type="text" readonly>
+                        </div>
+        
+                        <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Metode Pembayaran</label>
+                            <select class="block w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" id="metode_pembayaran" name="metode_order" required>
+                                <option value="">Pilih Metode Pembayaran</option>
+                                <option value="tunai">Tunai</option>
+                                <option value="non-tunai">Non Tunai</option>
+                            </select>
+                        </div>                        
+                    </div>                     
+                </div>
+        
+                <!-- Section: Catatan -->
+                <div class="mt-4 flex flex-col justify-between items-center">
+                    <p class="text-sm text-gray-600">
+                        <strong>Catatan:</strong> Jika memilih metode tunai, pembayaran dilakukan saat makanan tiba. Untuk metode non-tunai, harap transfer ke rekening BCA berikut: <strong>0138 1234 5678</strong>.
+                    </p>
+                    <!-- Submit Button -->
+                    <button type="submit" class="bg-secondary text-white py-2 px-5 rounded-lg ">Submit Order</button>
                 </div>
             </div>
         </form>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('message'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('message') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    @endif
 
     <script>
 function calculateTotal() {

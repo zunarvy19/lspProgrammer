@@ -29,7 +29,7 @@
                     <td class="py-2 px-4 border-b text-center">
                         <span class="
                             @if($order->status_order == 'dikirim') 
-                                text-yellow-500 
+                                text-blue-500 
                             @elseif($order->status_order == 'selesai') 
                                 text-green-500 
                             @else 
@@ -53,7 +53,7 @@
             @endforelse
         </tbody>
     </table>
-    
+    </div>
   </div>
       </div>
     </div>

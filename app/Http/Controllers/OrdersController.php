@@ -33,15 +33,11 @@ class OrdersController extends Controller
     {
         // Ambil pesanan user yang sedang login
         $orders = Orders::where('id_user', Auth()->user()->id)->get();
-    
-        // Ambil item pesanan yang terkait dengan pesanan tersebut
-        $ordersitems = Orders::with('items.menu')->where('id_user', Auth()->user()->id)->get();
+        
         // dd($ordersitems);
-        // Kirim data ke view dengan array asosiatif
         return view('user.pesanan', [
             'title' => 'Pesanan Saya',
             'orders' => $orders,
-            // 'ordersitems' => $ordersitems
         ]);
     }
 
@@ -59,20 +55,16 @@ class OrdersController extends Controller
         // Ambil order berdasarkan ID dengan relasi items dan menu
         $ordersitems = Orders::with('items.menu')->where('id', $id)->first();
     
-        // Misalkan Anda ingin mengirimkan data ini dengan nama variabel yang berbeda
-        $dataOrders = $ordersitems; // Menugaskan nilai ke variabel baru
+        // Re-initialize
+        $dataOrders = $ordersitems; 
     
         // Load view dengan data ordersitems
-        $pdf = Pdf::loadView('order.invoice', compact('dataOrders')); // Menggunakan nama variabel yang baru
+        $pdf = Pdf::loadView('order.invoice', compact('dataOrders')); 
     
         // Menghasilkan PDF untuk di-download
         return $pdf->download('invoice-order-' . $dataOrders->id . '.pdf');
     }
     
-    
-    
-    
-
     public function order(){
         $menus = menus::all();
 
@@ -133,7 +125,7 @@ class OrdersController extends Controller
     
                 // Simpan item yang dipesan ke tabel order_items
                 $orderItem = new OrderItems();
-                $orderItem->order_id = $order->id;
+                $orderItem->orders_id = $order->id;
                 $orderItem->user_id = $userId;
                 $orderItem->menu_id = $item['id'];
                 $orderItem->quantity = $item['quantity'];
@@ -146,17 +138,13 @@ class OrdersController extends Controller
         }
     
         // Redirect ke halaman sukses
-        return redirect()->route('user.order')->with('message', 'Order berhasil dibuat dan stok diperbarui!');
+        return redirect()->route('user.order')->with('message', 'Order berhasil dibuat!');
     }
     
 
     /**
      * Display the specified resource.
      */
-    public function show(orders $orders)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -169,10 +157,23 @@ class OrdersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(UpdateordersRequest $request, orders $orders)
-    // {
-    //     //
-    // }
+    public function updateStatus(Request $request, $id) {
+        // Validasi input status
+        $request->validate([
+            'status_order' => 'required|in:diproses,dikirim,selesai',
+        ]);
+    
+        // Temukan order berdasarkan ID
+        $order = Orders::findOrFail($id);
+    
+        // Perbarui status order
+        $order->status_order = $request->input('status_order');
+        $order->save();
+    
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Status order berhasil diperbarui!');
+    }
+    
 
     /**
      * Remove the specified resource from storage.
