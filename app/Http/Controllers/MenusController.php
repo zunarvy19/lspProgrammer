@@ -43,17 +43,38 @@ class MenusController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $data = menus::find($id);
+
+        return view('admin.crud.create',[
+            'title' => "Tambah data",
+            'data' => $data
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoremenusRequest $request)
+    public function store(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'id_products' => 'required|exists:products,id',
+            'nama_menu' => 'required|string|max:20',
+            'harga_menu' => 'required|numeric|min:0',
+            'stok_menu' => 'required|integer|min:0'
+        ]);
+
+        // dd($validatedData);
+
+        menus::create([
+            'id_products' => $request->id_products,
+            'nama_menu' => $request->nama_menu,
+            'harga_menu'=> $request->harga_menu,
+            'stok_menu'=> $request->stok_menu
+        ]);
+
+        return redirect()->route('admin.dataMenu')->with('success', 'Data berhasil ditambah');
     }
 
     /**

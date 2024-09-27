@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/update-mutama/{id}', [MenusController::class, 'updateStok'])->name('update.stok');
         Route::get('/admin/appetizer', [MenusController::class, 'appetizer'])->name('admin.appetizer');
         Route::get('/admin/minuman', [MenusController::class, 'minuman'])->name('admin.minuman');
+        Route::get('/admin/{id}/create', [MenusController::class, 'create'])->name('admin.create');
+        Route::post('/admin/{id}', [MenusController::class, 'store'])->name('admin.store');
     });
 });
 

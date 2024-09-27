@@ -14,6 +14,13 @@
                   <h1 class="text-3xl" >Data Appetizer</h1>
                   <hr class="w-40 border-2 border-secondary my-4">
               </div>
+              <div class="">
+                <a href="/admin/{{$appetizer->first()->id}}/create">
+                    <button type="button" class="text-white bg-red-600 
+                    focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Buat Data
+                    </button>
+                </a>
+              </div>
               <div>
 
               </div>

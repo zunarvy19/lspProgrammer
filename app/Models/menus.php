@@ -11,6 +11,13 @@ class menus extends Model
 
     protected $table = 'menuses';
 
+    protected $fillable = [
+        'id_products',
+        'nama_menu',
+        'harga_menu',
+        'stok_menu'
+    ];
+
     public function products(){
         return $this -> belongsTo(products::class);
     }

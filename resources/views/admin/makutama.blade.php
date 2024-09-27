@@ -9,21 +9,22 @@
   
       <div class="mt-20">
   
-          <div class="flex justify-between items-center ">
-              <div class="flex flex-col">
-                  <h1 class="text-3xl" >Data Makanan Utama</h1>
-                  <hr class="w-40 border-2 border-secondary my-4">
-              </div>
-              <div>
-                  {{-- @if($pertamina->isNotEmpty())
-                  <a href="/admin/{{$pertamina->first()->id}}/create">
-                      <button type="button" class="text-white bg-red-600 
-                      focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Buat Data
-                      </button>
-                  </a>
-                  @endif --}}
-              </div>
-          </div>
+        <div class="flex justify-between items-center ">
+            <div class="flex flex-col">
+                <h1 class="text-3xl" >Data Makanan utama</h1>
+                <hr class="w-40 border-2 border-secondary my-4">
+            </div>
+            <div class="">
+              <a href="/admin/{{$mutama->first()->id}}/create">
+                  <button type="button" class="text-white bg-red-600 
+                  focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Buat Data
+                  </button>
+              </a>
+            </div>
+            <div>
+
+            </div>
+        </div>
           
           @php
               $no = 1;
