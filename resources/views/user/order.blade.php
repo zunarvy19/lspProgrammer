@@ -8,7 +8,7 @@
   </div>  
     
     <div class="container mx-auto mt-10">
-        <form method="POST" action="{{ route('user.order') }}">
+        <form method="POST" action="{{ route('user.store') }}">
             @csrf
             <div class="shadow-md px-8 pt-6 pb-8 mb-4 flex flex-col mx-auto md:flex md:flex-col rounded-2xl bg-white">
                 

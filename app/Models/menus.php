@@ -8,17 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class menus extends Model
 {
     use HasFactory;
-
-    protected $table = 'menuses';
+    protected $table = 'menuses'; 
 
     protected $fillable = [
         'id_products',
         'nama_menu',
         'harga_menu',
-        'stok_menu'
+        'stok_menu',
     ];
 
     public function products(){
-        return $this -> belongsTo(products::class);
+        return $this->belongsTo(products::class);
+    }
+
+    public function orderItems(){
+        return $this->hasMany(orderItems::class);
     }
 }

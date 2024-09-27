@@ -10,13 +10,17 @@ class orderItems extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id',  // ID pesanan yang terkait dengan item ini
-        'id_menu',   // ID menu yang dipesan
-        'quantity',  // Jumlah item yang dipesan
-        'price',     // Harga item saat dipesan
+        'order_id',
+        'id_menu',
+        'quantity',
+        'price',
     ];
-    public function order(){
-        return $this->belongsTo(menus::class);
+
+    public function menu(){
+        return $this->belongsTo(menus::class, 'menu_id');
     }
 
+    public function order(){
+        return $this->belongsTo(orders::class, 'orders_id');
+    }
 }

@@ -32,7 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/daftar-menu', [OrdersController::class, "daftarmenu"])->name('user.daftarmenu');
     Route::get('/pesanan-saya', [OrdersController::class, "pesanan"])->name('user.pesanan');
     Route::get('/pesan-sekarang', [OrdersController::class, 'order'])->name( 'user.order');
-    Route::post('/pesan', [OrdersController::class, 'store'])->name('user.order');
+    Route::post('/pesan', [OrdersController::class, 'store'])->name('user.store');
+    Route::get('/dummy', [OrdersController::class, 'dummy'])->name('user.dummy');
+    Route::get('/order/{id}/invoice', [OrdersController::class, 'generateInvoice'])->name('order.invoice');
 
 
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\menus;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class OrdersController extends Controller
@@ -28,11 +29,49 @@ class OrdersController extends Controller
         ], compact('makutama', 'appetizer', 'minuman'));
     }
 
-    public function pesanan(){
+    public function pesanan()
+    {
+        // Ambil pesanan user yang sedang login
+        $orders = Orders::where('id_user', Auth()->user()->id)->get();
+    
+        // Ambil item pesanan yang terkait dengan pesanan tersebut
+        $ordersitems = Orders::with('items.menu')->where('id_user', Auth()->user()->id)->get();
+        // dd($ordersitems);
+        // Kirim data ke view dengan array asosiatif
         return view('user.pesanan', [
-            'title'=> 'Pesanan Saya'
+            'title' => 'Pesanan Saya',
+            'orders' => $orders,
+            // 'ordersitems' => $ordersitems
         ]);
     }
+
+    public function dummy(){
+        $ordersitems = Orders::with('items.menu')->where('id_user', Auth()->user()->id)->get();
+        // dd($ordersitems);
+        return view('user.dummy', [
+            'title' => 'Pesanan Saya',
+            'ordersitems' => $ordersitems
+        ]);
+    }
+
+    public function generateInvoice($id)
+    {
+        // Ambil order berdasarkan ID dengan relasi items dan menu
+        $ordersitems = Orders::with('items.menu')->where('id', $id)->first();
+    
+        // Misalkan Anda ingin mengirimkan data ini dengan nama variabel yang berbeda
+        $dataOrders = $ordersitems; // Menugaskan nilai ke variabel baru
+    
+        // Load view dengan data ordersitems
+        $pdf = Pdf::loadView('order.invoice', compact('dataOrders')); // Menggunakan nama variabel yang baru
+    
+        // Menghasilkan PDF untuk di-download
+        return $pdf->download('invoice-order-' . $dataOrders->id . '.pdf');
+    }
+    
+    
+    
+    
 
     public function order(){
         $menus = menus::all();
@@ -56,47 +95,59 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        // Ambil data pengguna yang sedang login
-        $user = Auth::user();
-
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth()->user()->id; // Gunakan ID pengguna langsung
+        
         // Validasi request
         $validated = $request->validate([
             'menu' => 'required|array',
-            'menu.*.id' => 'required|exists:menus,id',
+            'menu.*.id' => 'required|exists:menuses,id',
             'menu.*.quantity' => 'required|integer|min:1',
             'menu.*.price' => 'required|numeric',
             'metode_order' => 'required|string',
         ]);
-
+    
         // Hitung total harga
         $totalPrice = 0;
         foreach ($validated['menu'] as $item) {
             $totalPrice += $item['price'] * $item['quantity'];
         }
-
+    
         // Buat order baru
         $order = new Orders();
-        $order->id_user = $user->id;
-        $order->total_price = $totalPrice;
+        $order->id_user = $userId;
+        $order->total_biaya = $totalPrice;
         $order->metode_order = $validated['metode_order'];
         $order->tanggal_order = now();
         $order->save();
-
-        // Simpan item-item yang dipesan ke order_items
+    
+        // Simpan item-item yang dipesan ke order_items dan kurangi stok menu
         foreach ($validated['menu'] as $item) {
-            $orderItem = new OrderItems();
-            $orderItem->order_id = $order->id;
-            $orderItem->menu_id = $item['id'];
-            $orderItem->quantity = $item['quantity'];
-            $orderItem->price = $item['price'];
-            $orderItem->save();
+            // Kurangi stok menu
+            $menu = menus::find($item['id']);
+            
+            if ($menu->stok_menu >= $item['quantity']) {
+                // Kurangi stok berdasarkan jumlah yang dipesan
+                $menu->stok_menu -= $item['quantity'];
+                $menu->save(); // Simpan perubahan stok ke database
+    
+                // Simpan item yang dipesan ke tabel order_items
+                $orderItem = new OrderItems();
+                $orderItem->order_id = $order->id;
+                $orderItem->user_id = $userId;
+                $orderItem->menu_id = $item['id'];
+                $orderItem->quantity = $item['quantity'];
+                $orderItem->price = $item['price'];
+                $orderItem->save();
+            } else {
+                // Jika stok tidak cukup, batalkan dan tampilkan pesan kesalahan
+                return redirect()->back()->withErrors(['menu' => "Stok menu '{$menu->nama_menu}' tidak mencukupi."]);
+            }
         }
-
+    
         // Redirect ke halaman sukses
-        return redirect()->route('order.success')->with('message', 'Order berhasil dibuat!');
+        return redirect()->route('user.order')->with('message', 'Order berhasil dibuat dan stok diperbarui!');
     }
-    
-    
     
 
     /**
