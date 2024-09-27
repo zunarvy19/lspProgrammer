@@ -16,15 +16,15 @@
 
           <div class="w-auto md:w-[20%] px-14 py-10 bg-secondary rounded-lg" id="card">
             <div class="font-bold text-white">
-              <h3 class="text-2xl">Jumlah Vendor: </h3>
-              <h3 id="datenow" class="text-lg"></h3>
+              <h3 class="text-2xl">Jumlah Kategori: </h3>
+              <h3 id="datenow" class="text-lg">{{$products}}</h3>
             </div>
           </div>
 
           <div class="w-auto md:w-[20%] p-10 bg-secondary rounded-lg" id="card">
             <div class="font-bold text-white">
-              <h3 class="text-2xl">Jumlah Data BBM: </h3>
-              <h3 class="text-lg"></h3>
+              <h3 class="text-2xl">Jumlah Menu: </h3>
+              <h3 class="text-lg">{{$menus}}</h3>
             </div>
           </div>
 
