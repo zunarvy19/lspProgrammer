@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/daftar-menu', [OrdersController::class, "daftarmenu"])->name('user.daftarmenu');
     Route::get('/pesanan-saya', [OrdersController::class, "pesanan"])->name('user.pesanan');
+    Route::get('/pesan-sekarang', [OrdersController::class, 'order'])->name( 'user.order');
+    Route::post('/pesan', [OrdersController::class, 'store'])->name('user.order');
 
 
 

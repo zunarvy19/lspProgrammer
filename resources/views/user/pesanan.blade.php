@@ -2,9 +2,12 @@
 
 @section('main')
     <main>
-      {{-- container 1 --}}
+      {{-- Pesanan Container --}}
       <div >
-        
+        {{-- form beli  --}}
+        <div class="">
+
+        </div>
       </div>
     </main>
 @endsection

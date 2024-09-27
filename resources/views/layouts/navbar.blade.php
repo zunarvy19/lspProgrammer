@@ -62,6 +62,9 @@
           <a href="/daftar-menu" class="text-lg block py-2 px-3  relative transition-transform transform hover:-translate-y-1 duration-200 ease-in-out">Daftar Menu</a>
         </li>
         <li>
+          <a href="/pesan-sekarang" class="text-lg block py-2 px-3  relative transition-transform transform hover:-translate-y-1 duration-200 ease-in-out">Pesan Sekarang</a>
+        </li>
+        <li>
           <a href="/pesanan-saya" class="text-lg block py-2 px-3  relative transition-transform transform hover:-translate-y-1 duration-200 ease-in-out" >Pesanan Saya</a>
         </li>
       </ul>
