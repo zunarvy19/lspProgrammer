@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('orders_id');
             $table->unsignedBigInteger('menu_id');
             $table->integer('quantity');
             $table->decimal('price', 8, 2); // Store the price at the time of order
