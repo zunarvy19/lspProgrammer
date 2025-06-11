@@ -38,9 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}/invoice', [OrdersController::class, 'generateInvoice'])->name('order.invoice');
 
 
-
-
-
     Route::middleware('admin')->group(function () {
         Route::get('/admin/dashboard', [adminController::class, 'index'])->name('admin.dashboard.index');
         Route::get('/admin/menu', [adminController::class, 'menu'])->name('admin.dataMenu');
@@ -49,8 +46,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/update-mutama/{id}', [MenusController::class, 'updateStok'])->name('update.stok');
         Route::get('/admin/appetizer', [MenusController::class, 'appetizer'])->name('admin.appetizer');
         Route::get('/admin/minuman', [MenusController::class, 'minuman'])->name('admin.minuman');
+
+        // crud menu
         Route::get('/admin/{id}/create', [MenusController::class, 'create'])->name('admin.create');
         Route::post('/admin/{id}', [MenusController::class, 'store'])->name('admin.store');
+        Route::delete('/admin/menus/{id}', [MenusController::class, 'destroy'])->name('admin.menus.destroy');
+
+        // print pdf
         Route::get('/admin/cetak-pdf', [AdminController::class, 'cetakpdf'])->name('admin.cetakpdf');
 
     });

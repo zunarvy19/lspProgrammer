@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\menus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoremenusRequest;
 use App\Http\Requests\UpdatemenusRequest;
+use App\Models\products;
 
 class MenusController extends Controller
 {
@@ -34,10 +37,11 @@ class MenusController extends Controller
     }
     public function minuman(){
         $minuman = menus::with('products')->where('id_products', 3)->get();
+        $category = products::where('id', 3)->get();
         // dd($mutama);
         return view('admin.minuman',[
             'title' => 'Minuman'
-        ], compact('minuman'));
+        ], compact(['minuman', 'category']));
     }
 
     /**
@@ -45,37 +49,47 @@ class MenusController extends Controller
      */
     public function create($id)
     {
-        $data = menus::find($id);
+        $data = menus::with('products')->get();
+        $category = products::findOrFail($id);
+        // dd($data);
 
         return view('admin.crud.create',[
             'title' => "Tambah data",
-            'data' => $data
+            'data' => $data,
+            'category' => $category
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'id_products' => 'required|exists:products,id',
-            'nama_menu' => 'required|string|max:20',
-            'harga_menu' => 'required|numeric|min:0',
-            'stok_menu' => 'required|integer|min:0'
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'id_products' => 'required',
+                'nama_menu' => 'required|string|max:20',
+                'harga_menu' => 'required|numeric|min:0',
+                'stok_menu' => 'required|integer|min:0',
+                'gambar_menu' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
 
-        // dd($validatedData);
+            if ($request->hasFile('gambar_menu')) {
+                $path = $request->file('gambar_menu')->store('menu-images', 'public');
+                $validatedData['gambar_menu'] = $path;
+            }
 
-        menus::create([
-            'id_products' => $request->id_products,
-            'nama_menu' => $request->nama_menu,
-            'harga_menu'=> $request->harga_menu,
-            'stok_menu'=> $request->stok_menu
-        ]);
+            // dd($validatedData);
 
-        return redirect()->route('admin.dataMenu')->with('success', 'Data berhasil ditambah');
-    }
+            Menus::create($validatedData);
+
+            return redirect()->route('admin.dataMenu')->with('success', 'Data menu berhasil ditambah');
+
+        } catch (\Exception $e) {
+            
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan data. Pesan error: ' . $e->getMessage())->withInput();
+        }
+    }   
 
     /**
      * Display the specified resource.
@@ -123,8 +137,24 @@ class MenusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(menus $menus)
+    public function destroy($id)
     {
-        //
+        try {
+            
+            $menu = Menus::findOrFail($id);
+
+            if ($menu->gambar_menu) {
+                Storage::disk('public')->delete($menu->gambar_menu);
+            }
+
+            $menu->delete();
+
+            return redirect()->route('admin.dataMenu')->with('success', 'Data menu berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            Log::error('Gagal menghapus data menu: ' . $e->getMessage());
+
+            return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+        }
     }
 }

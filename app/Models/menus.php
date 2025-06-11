@@ -15,6 +15,7 @@ class menus extends Model
         'nama_menu',
         'harga_menu',
         'stok_menu',
+        'gambar_menu'
     ];
 
     public function products(){
