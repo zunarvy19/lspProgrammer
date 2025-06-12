@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\DaftarMenuController;
 use App\Http\Controllers\MenusController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProfileController;
@@ -29,13 +31,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/daftar-menu', [OrdersController::class, "daftarmenu"])->name('user.daftarmenu');
+    Route::get('/daftar-menu', [DaftarMenuController::class, "daftarmenu"])->name('user.daftarMenu');
     Route::put('/admin/update-status/{id}', [OrdersController::class, 'updateStatus'])->name('admin.updateStatus');
-    Route::get('/pesanan-saya', [OrdersController::class, "pesanan"])->name('user.pesanan');
-    Route::get('/pesan-sekarang', [OrdersController::class, 'order'])->name( 'user.order');
-    Route::post('/pesan', [OrdersController::class, 'store'])->name('user.store');
+    Route::get('/orders/create', [OrdersController::class, 'order'])->name('user.order'); 
+    Route::post('/orders', [OrdersController::class, 'store'])->name('user.store');      
+    Route::get('/orders', [OrdersController::class, 'pesanan'])->name('user.pesanan');    
     Route::get('/dummy', [OrdersController::class, 'dummy'])->name('user.dummy');
     Route::get('/order/{id}/invoice', [OrdersController::class, 'generateInvoice'])->name('order.invoice');
+
+    // cart
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartController::class, 'get'])->name('get');
+        Route::post('/add/{menu}', [CartController::class, 'add'])->name('add');
+        Route::post('/remove/{menu}', [CartController::class, 'remove'])->name('remove');
+        Route::post('/notes', [CartController::class, 'updateNotes'])->name('notes.update');
+    });
 
 
     Route::middleware('admin')->group(function () {

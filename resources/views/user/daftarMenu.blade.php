@@ -53,10 +53,10 @@
                                     <span class="text-xl font-bold text-gray-900">
                                         Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}
                                     </span>
-                                    <a href="#"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <button type="button" data-id="{{ $menu->id }}"
+                                        class="add-to-cart-btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                         Beli
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -115,10 +115,10 @@
                                         <span class="text-xl font-bold text-gray-900">
                                             Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}
                                         </span>
-                                        <a href="#"
-                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button type="button" data-id="{{ $menu->id }}"
+                                            class="add-to-cart-btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                             Beli
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -176,10 +176,10 @@
                                             <span class="text-xl font-bold text-gray-900">
                                                 Rp {{ number_format($menu->harga_menu, 0, ',', '.') }}
                                             </span>
-                                            <a href="#"
-                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <button type="button" data-id="{{ $menu->id }}"
+                                                class="add-to-cart-btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                 Beli
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -22,18 +22,20 @@ class MenusController extends Controller
 
     public function makutama(){
         $mutama = menus::with('products')->where('id_products', 1)->get();
+        $category = products::where('id', 1)->get();
         // dd($mutama);
         return view('admin.makutama',[
             'title' => 'Makanan Utama'
-        ], compact('mutama'));
+        ], compact(['mutama', 'category']));
     }
 
     public function appetizer(){
         $appetizer = menus::with('products')->where('id_products', 2)->get();
+        $category = products::where('id', 2)->get();
         // dd($mutama);
         return view('admin.appetizer',[
             'title' => 'Appetizer'
-        ], compact('appetizer'));
+        ], compact(['appetizer', 'category']));
     }
     public function minuman(){
         $minuman = menus::with('products')->where('id_products', 3)->get();

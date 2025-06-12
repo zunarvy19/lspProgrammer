@@ -2,184 +2,145 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\orders;
-use App\Models\orderItems;
-use App\Models\Menu;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\menus;
+use App\Models\orders; 
+use App\Models\OrderDetail; // Gunakan nama model singular 'OrderDetail'
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 
 class OrdersController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan halaman riwayat pesanan milik pengguna yang sedang login.
+     * (Sebelumnya method 'pesanan' dan 'dummy')
      */
-    public function daftarmenu()
-    {
-        $makutama = menus::with('products')->where('id_products', 1)->get();
-        $appetizer = menus::with('products')->where('id_products', 2)->get();
-        $minuman = menus::with('products')->where('id_products', 3)->get();
-
-        // dd($makutama);
-        return view('user.daftarmenu',[
-            'title' => 'Daftar Menu'
-        ], compact('makutama', 'appetizer', 'minuman'));
-    }
-
     public function pesanan()
     {
-        // Ambil pesanan user yang sedang login
-        $orders = Orders::where('id_user', Auth()->user()->id)->get();
-        
-        // dd($ordersitems);
+        $orders = orders::with('details.menu') // Eager load relasi untuk performa
+                       ->where('user_id', Auth::id())
+                       ->latest() // Urutkan dari yang terbaru
+                       ->get();
+
         return view('user.pesanan', [
             'title' => 'Pesanan Saya',
-            'orders' => $orders,
+            'orders' => $orders
         ]);
-    }
-
-    public function dummy(){
-        $ordersitems = Orders::with('items.menu')->where('id_user', Auth()->user()->id)->get();
-        // dd($ordersitems);
-        return view('user.dummy', [
-            'title' => 'Pesanan Saya',
-            'ordersitems' => $ordersitems
-        ]);
-    }
-
-    public function generateInvoice($id)
-    {
-        // Ambil order berdasarkan ID dengan relasi items dan menu
-        $ordersitems = Orders::with('items.menu')->where('id', $id)->first();
-    
-        // Re-initialize
-        $dataOrders = $ordersitems; 
-    
-        // Load view dengan data ordersitems
-        $pdf = Pdf::loadView('order.invoice', compact('dataOrders')); 
-    
-        // Menghasilkan PDF untuk di-download
-        return $pdf->download('invoice-order-' . $dataOrders->id . '.pdf');
-    }
-    
-    public function order(){
-        $menus = menus::all();
-
-        // dd($menus);
-        return view('user.order',[
-            'title' => 'Pesan Sekarang!'
-        ], compact("menus"));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan halaman review pesanan (checkout) berdasarkan isi keranjang.
+     * (Sebelumnya method 'order')
      */
-    public function create()
+    public function order()
     {
-        //
+        // dd(session()->get('cart_notes')); 
+        $cartItems = session()->get('cart', []);
+        $cartNotes = session()->get('cart_notes', '');
+
+        if (empty($cartItems)) {
+            return redirect()->route('user.daftarMenu')->with('info', 'Keranjang Anda kosong, silakan pilih menu.');
+        }
+
+        $totalPrice = 0;
+        foreach ($cartItems as $item) {
+            $totalPrice += $item['quantity'] * $item['harga_menu'];
+        }
+
+        return view('user.order', [
+            'title' => 'Review Pesanan',
+            'cartItems' => $cartItems,
+            'totalPrice' => $totalPrice,
+            'cartNotes' => $cartNotes,
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Memvalidasi dan menyimpan pesanan dari keranjang ke database.
+     * (Sebelumnya method 'store' Anda)
      */
     public function store(Request $request)
     {
-        // Ambil ID pengguna yang sedang login
-        $userId = Auth()->user()->id; // Gunakan ID pengguna langsung
-        
-        // Validasi request
-        $validated = $request->validate([
-            'menu' => 'required|array',
-            'menu.*.id' => 'required|exists:menuses,id',
-            'menu.*.quantity' => 'required|integer|min:1',
-            'menu.*.price' => 'required|numeric',
-            'metode_order' => 'required|string',
-        ]);
-    
-        // Hitung total harga
-        $totalPrice = 0;
-        foreach ($validated['menu'] as $item) {
-            $totalPrice += $item['price'] * $item['quantity'];
-        }
-    
-        // Buat order baru
-        $order = new Orders();
-        $order->id_user = $userId;
-        $order->total_biaya = $totalPrice;
-        $order->metode_order = $validated['metode_order'];
-        $order->tanggal_order = now();
-        $order->save();
-    
-        // Simpan item-item yang dipesan ke order_items dan kurangi stok menu
-        foreach ($validated['menu'] as $item) {
-            // Kurangi stok menu
-            $menu = menus::find($item['id']);
-            
-            if ($menu->stok_menu >= $item['quantity']) {
-                // Kurangi stok berdasarkan jumlah yang dipesan
-                $menu->stok_menu -= $item['quantity'];
-                $menu->save(); // Simpan perubahan stok ke database
-    
-                // Simpan item yang dipesan ke tabel order_items
-                $orderItem = new OrderItems();
-                $orderItem->orders_id = $order->id;
-                $orderItem->user_id = $userId;
-                $orderItem->menu_id = $item['id'];
-                $orderItem->quantity = $item['quantity'];
-                $orderItem->price = $item['price'];
-                $orderItem->save();
-            } else {
-                // Jika stok tidak cukup, batalkan dan tampilkan pesan kesalahan
-                return redirect()->back()->withErrors(['menu' => "Stok menu '{$menu->nama_menu}' tidak mencukupi."]);
-            }
-        }
-    
-        // Redirect ke halaman sukses
-        return redirect()->route('user.order')->with('message', 'Order berhasil dibuat!');
-    }
-    
-
-    /**
-     * Display the specified resource.
-     */
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(orders $orders)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updateStatus(Request $request, $id) {
-        // Validasi input status
         $request->validate([
-            'status_order' => 'required|in:diproses,dikirim,selesai',
+            'notes'         => 'nullable|string|max:1000',
+            'metode_order'  => 'required|in:tunai,non-tunai',
         ]);
-    
-        // Temukan order berdasarkan ID
-        $order = Orders::findOrFail($id);
-    
-        // Perbarui status order
-        $order->status_order = $request->input('status_order');
-        $order->save();
-    
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Status order berhasil diperbarui!');
+        
+        $cartItems = session()->get('cart', []);
+        //  dd($cartItems); 
+        if (empty($cartItems)) {
+            return redirect()->route('user.daftarMenu')->with('error', 'Tidak bisa memproses pesanan karena keranjang kosong.');
+        }
+
+        try {
+            //  Transaction untuk memastikan integritas data
+            $order = DB::transaction(function () use ($request, $cartItems) {
+                // Ambil harga total dari keranjang, bukan dari form, untuk keamanan
+                $totalPrice = 0;
+                foreach ($cartItems as $item) {
+                    $totalPrice += $item['quantity'] * $item['harga_menu'];
+                }
+
+                $createdOrder = orders::create([
+                    'user_id'       => Auth::id(),
+                    'total_biaya'   => $totalPrice,
+                    'metode_order'  => $request->metode_order,
+                    'notes'         => $request->notes,
+                    'status'        => 'Diterima',
+                ]);
+
+                
+                foreach ($cartItems as $menuId => $details) {
+                    $menu = menus::find($menuId);
+
+                //     dd([
+                //     'menuId_dari_keranjang' => $menuId,
+                //     'details_dari_keranjang' => $details,
+                //     'hasil_pencarian_menu' => $menu,
+                //     'apakah_stok_cukup' => $menu ? ($menu->stok_menu >= $details['quantity']) : 'Menu tidak ditemukan'
+                // ]);
+                    if ($menu && $menu->stok_menu >= $details['quantity']) {
+                        $createdOrder->details()->create([
+                            'menu_id'   => $menuId,
+                            'quantity'  => $details['quantity'],
+                            'price'     => $menu->harga_menu, 
+                        ]);
+                        // Kurangi stok
+                        $menu->decrement('stok_menu', $details['quantity']);
+                    } else {
+                        // Jika ada item yg stoknya habis, gagalkan seluruh transaksi
+                        throw new \Exception("Stok untuk menu '{$menu->nama_menu}' tidak mencukupi.");
+                    }
+                }
+
+                return $createdOrder;
+            });
+
+            // If transaksi berhasil, kosongkan keranjang
+            session()->forget(['cart', 'cart_notes']);
+
+            return redirect()->route('user.pesanan')->with('success', 'Pesanan Anda dengan ID #' . $order->id . ' berhasil dibuat!');
+
+        } catch (\Exception $e) {
+            // return back()->with('error', $e->getMessage());
+             dd($e);
+        }
     }
-    
 
     /**
-     * Remove the specified resource from storage.
+     * Menghasilkan invoice PDF untuk pesanan tertentu.
      */
-    public function destroy(orders $orders)
-    {
-        //
-    }
+public function generateInvoice($id)
+{
+    // Pastikan kita mengambil relasi 'user' dengan method with()
+    // Ini akan mengisi properti $order->user
+    $order = orders::with('details.menu', 'user')
+                  ->where('user_id', Auth::id()) // Pengecekan keamanan, hanya pemilik yang bisa unduh
+                  ->findOrFail($id);
+
+    $pdf = Pdf::loadView('order.invoice', ['order' => $order]); 
+
+    return $pdf->download('invoice-order-' . $order->id . '.pdf');
+}
 }
