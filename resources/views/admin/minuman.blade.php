@@ -98,13 +98,12 @@
                                                                 </ul>
                                                             </form>
                                                         <td>
-                                                            <ul class="flex items-end space-x-4">
+                                                            <ul class="flex items-center space-x-4">
                                                                 <li>
-                                                                    <button type="submit"
-                                                                        class="bg-green-600  text-white px-4 py-2 rounded">
-                                                                        Update
-                                                                    </button>
-                                                                </li>
+                                                                    <a href="{{ route('admin.menus.edit', $data->id) }}"
+                                                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors duration-200">
+                                                                    Update
+                                                                    </a>
                                                                 <li>
                                                                     {{-- delete --}}
                                                                     <form action="{{ route('admin.menus.destroy', $data->id) }}" method="POST"

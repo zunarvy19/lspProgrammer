@@ -104,10 +104,50 @@ class MenusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(menus $menus)
+    public function edit(menus $menu)
     {
-        //
+        $products = products::all();
+        // dd($products);
+
+        return view('admin.crud.edit', [
+            'title' => 'Edit Menu: ' . $menu->nama_menu,
+            'menu' => $menu,
+            'products' => $products,
+        ]);
     }
+
+    public function update(Request $request, menus $menu)
+    {
+    try {
+        
+        $validatedData = $request->validate([
+            'id_products' => 'required|exists:products,id',
+            'nama_menu' => 'required|string|max:20',
+            'harga_menu' => 'required|numeric|min:0',
+            'stok_menu' => 'required|integer|min:0',
+            'gambar_menu' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' 
+        ]);
+
+        
+        if ($request->hasFile('gambar_menu')) {
+            
+            if ($menu->gambar_menu) {
+                Storage::disk('public')->delete($menu->gambar_menu);
+            }
+
+            
+            $path = $request->file('gambar_menu')->store('menu-images', 'public');
+            $validatedData['gambar_menu'] = $path;
+        }
+
+        $menu->update($validatedData);
+
+        return redirect()->route('admin.dataMenu')->with('success', 'Data menu berhasil diperbarui.');
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat memperbarui data. Error: ' . $e->getMessage())->withInput();
+    }
+}
 
     /**
      * Update the specified resource in storage.

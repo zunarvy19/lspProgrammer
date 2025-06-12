@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Ubah metode_order menjadi enum dengan pilihan tunai dan non-tunai
             $table->enum('metode_order', ['tunai', 'non-tunai'])->change();
         });
     }
@@ -23,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Kembalikan perubahan jika migration di-rollback
             $table->string('metode_order')->change();
         });
     }

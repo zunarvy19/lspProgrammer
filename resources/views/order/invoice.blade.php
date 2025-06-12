@@ -85,7 +85,7 @@
 
         <div class="invoice-details">
             <p><strong>ID Pesanan:</strong> #{{ $order->id }}</p>
-            <p><strong>Nama Pelanggan:</strong> {{ $order->user->nameweb ?? 'Tidak tersedia' }}</p>
+            <p><strong>Nama Pelanggan:</strong> {{ $order->user->name ?? 'Tidak tersedia' }}</p>
             {{-- DIUBAH: Menggunakan nama kolom yang benar --}}
             <p><strong>Metode Pembayaran:</strong> {{ ucfirst($order->metode_order) }}</p>
             <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>

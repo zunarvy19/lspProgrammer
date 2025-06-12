@@ -11,16 +11,16 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             
-            // Foreign key ke tabel 'orders'
+            // Foreign key tabel 'orders'
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             
-            // Foreign key ke tabel 'menus'
+            // Foreign key tabel 'menus'
             $table->foreignId('menu_id')->constrained('menuses')->onDelete('cascade');
 
             // Jumlah item menu yang dipesan
             $table->integer('quantity');
 
-            // Harga menu PADA SAAT dipesan (untuk arsip)
+            // Harga menu 
             $table->decimal('price', 10, 2);
 
             $table->timestamps();

@@ -25,7 +25,7 @@ return new class extends Migration
             
             $table->text('notes')->nullable();  
 
-            $table->timestamps(); // Ini sudah mencakup tanggal order (created_at)
+            $table->timestamps(); 
 
         });
     }

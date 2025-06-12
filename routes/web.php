@@ -61,6 +61,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/{id}/create', [MenusController::class, 'create'])->name('admin.create');
         Route::post('/admin/{id}', [MenusController::class, 'store'])->name('admin.store');
         Route::delete('/admin/menus/{id}', [MenusController::class, 'destroy'])->name('admin.menus.destroy');
+        Route::get('/menus/{menu}/edit', [MenusController::class, 'edit'])->name('admin.menus.edit');
+        Route::put('/menus/{menu}', [MenusController::class, 'update'])->name('admin.menus.update');
+
+        // update status
+        Route::put('/orders/{order}/status', [adminController::class, 'updateStatus'])->name('orders.updateStatus');
 
         // print pdf
         Route::get('/admin/cetak-pdf', [AdminController::class, 'cetakpdf'])->name('admin.cetakpdf');
