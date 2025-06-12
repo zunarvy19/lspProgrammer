@@ -17,7 +17,13 @@ class orders extends Model
         'notes',
         'status',
     ];
+    public static $statuses = [
+        'Diterima',
+        'diproses',
+        'Siap Ambil',
+        'Sudah bayar'
 
+    ];
     // public function items(){
     //     return $this->hasMany(orderItems::class, 'orders_id');
     // }

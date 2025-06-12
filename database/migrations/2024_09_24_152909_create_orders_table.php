@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             
                 
-            $table->enum('status', ['Diterima', 'diproses', 'Siap Ambil', 'Sudah bayar',])->default('Diterima');
+            $table->enum('status', ['Diterima', 'diproses', 'Siap Ambil', 'Sudah bayar'])->default('Diterima');
             
                 
             $table->decimal('total_biaya', 10, 2); 

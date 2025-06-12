@@ -22,6 +22,7 @@ class User extends Authenticatable
         'alamat',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -44,5 +45,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+        public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isKasir(): bool
+    {
+        return $this->role === 'kasir';
+    }
+
+    public function isKitchenStaff(): bool
+    {
+        return $this->role === 'staff_kitchen';
+    }
     
+    public function canManageOrders(): bool
+    {
+        return in_array($this->role, ['admin', 'kasir', 'staff_kitchen']);
+    }
 }

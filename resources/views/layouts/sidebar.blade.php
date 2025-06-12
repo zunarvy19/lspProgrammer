@@ -64,90 +64,147 @@
    <aside id="logo-sidebar"
       class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
       aria-label="Sidebar">
-      <div class="h-full px-3 pb-4 overflow-y-auto bg-white ">
+      <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
          <ul class="space-y-2 font-medium">
 
+            {{--============================================
+            MENU HANYA UNTUK ADMIN
+            ============================================ --}}
+            @if(auth()->user()->isAdmin())
             <li>
-               <a href="{{route('admin.dashboard.index')}}" class="flex items-center p-2 text-gray-900 rounded-lg ">
-                  <svg class="w-5 h-5 text-gray-500 transition duration-75 " aria-hidden="true"
-                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                     <path
-                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                     <path
-                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                  </svg>
-                  <span class="ms-3">Dashboard</span>
-               </a>
-            </li>
-
-            <li>
-               <a href="/admin/menu" class="flex items-center p-2 text-gray-900 rounded-lg ">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
-                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                     <path
-                        d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                  </svg>
-                  <span class="flex-1 ms-3 whitespace-nowrap">Data Menu</span>
+               <a href="{{ route('admin.dashboard.index') }}"
+                 class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                 <svg class="w-5 h-5 text-gray-500 transition duration-75" aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                   <path
+                     d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                   <path
+                     d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                 </svg>
+                 <span class="ms-3">Dashboard</span>
                </a>
             </li>
             <li>
-
-               <a href="/admin/data-order" class="flex items-center p-2 text-gray-900 rounded-lg ">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
-                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                     <path
-                        d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                  </svg>
-                  <span class="flex-1 ms-3 whitespace-nowrap">Data Order</span>
+               <a href="{{ route('admin.dataMenu') }}"
+                 class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75" aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                   <path
+                     d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
+                 </svg>
+                 <span class="flex-1 ms-3 whitespace-nowrap">Data Menu</span>
                </a>
             </li>
+         @endif
 
+            @if (auth()->user()->isKasir())
             <li>
-               <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="flex items-center">
+               <a href="{{ route('kasir.dashboard') }}"
+                 class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                 <svg class="w-5 h-5 text-gray-500 transition duration-75" aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                   <path
+                     d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                   <path
+                     d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                 </svg>
+                 <span class="ms-3">Dashboard Kasir</span>
+               </a>
+            </li>
+         @endif
+
+            @if (auth()->user()->isKitchenStaff())
+            <li>
+               <a href="{{ route('kitchen.dashboard') }}"
+                 class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                 <svg class="w-5 h-5 text-gray-500 transition duration-75" aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                   <path
+                     d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                   <path
+                     d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                 </svg>
+                 <span class="ms-3">Staff Kithcen</span>
+               </a>
+            </li>
+         @endif
+
+            {{--===================================================================
+            MENU UNTUK ADMIN, KASIR, DAN STAFF KITCHEN
+            ==================================================================== --}}
+            @if (auth()->user()->canManageOrders())
+            <li>
+               {{-- Arahkan semua peran yang diizinkan ke SATU route yang sama --}}
+               <a href="{{ route('admin.dataOrder') }}"
+                 class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75" aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                 </svg>
+                 <span class="flex-1 ms-3 whitespace-nowrap">Data Order</span>
+               </a>
+            </li>
+         @endif
+
+            {{-- ... Anda bisa menambahkan menu lain untuk Kasir di sini ... --}}
+            {{-- @if(auth()->user()->isKasir() || auth()->user()->isAdmin())
+            <li>
+               <a href="#">Laporan Penjualan</a>
+            </li>
+            @endif --}}
+
+
+            {{--============================================
+            TOMBOL LOGOUT (Selalu ada untuk semua peran)
+            ============================================ --}}
+            <li>
+               {{-- Form logout dibuat lebih sederhana --}}
+               <form method="POST" action="{{ route('logout') }}" id="logoutForm">
                   @csrf
-                  <x-dropdown-link href="#" id="logoutLink" class="flex items-center -ml-2">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6 mr-2">
+                  <a href="{{ route('logout') }}" id="logoutLink"
+                     onclick="event.preventDefault(); document.getElementById('logoutForm').submit();"
+                     class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                     <svg class="w-5 h-5 text-gray-500 transition duration-75" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                      </svg>
-                     <span class="text-gray-900">
-                        {{ __('Log Out') }}
-                     </span>
-                  </x-dropdown-link>
+                     <span class="flex-1 ms-3 whitespace-nowrap">Log Out</span>
+                  </a>
                </form>
-
-
-
             </li>
 
          </ul>
       </div>
    </aside>
 
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script>
+      // Script logout dipindahkan ke sini agar lebih rapi
       document.addEventListener('DOMContentLoaded', function () {
-         const logoutForm = document.getElementById('logoutForm');
+         // Cek jika elemennya ada sebelum menambahkan listener
          const logoutLink = document.getElementById('logoutLink');
-
-         logoutLink.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            Swal.fire({
-               title: 'Konfirmasi',
-               text: 'Apakah Anda yakin ingin logout?',
-               icon: 'warning',
-               showCancelButton: true,
-               confirmButtonColor: '#1F2937',
-               cancelButtonColor: '#d33',
-               confirmButtonText: 'Ya, Logout',
-               cancelButtonText: 'Batal'
-            }).then((result) => {
-               if (result.isConfirmed) {
-                  logoutForm.submit(); // Submit form if user confirms
-               }
+         if (logoutLink) {
+            logoutLink.addEventListener('click', function (event) {
+               event.preventDefault(); // Mencegah link berpindah halaman
+               Swal.fire({
+                  title: 'Konfirmasi Logout',
+                  text: 'Apakah Anda yakin ingin keluar?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Ya, Logout!',
+                  cancelButtonText: 'Batal'
+               }).then((result) => {
+                  if (result.isConfirmed) {
+                     // Jika dikonfirmasi, submit form logout
+                     document.getElementById('logoutForm').submit();
+                  }
+               });
             });
-         });
+         }
       });
    </script>
 

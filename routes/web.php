@@ -3,9 +3,12 @@
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DaftarMenuController;
+use App\Http\Controllers\kasirController;
+use App\Http\Controllers\kitchenController;
 use App\Http\Controllers\MenusController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,8 +50,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/notes', [CartController::class, 'updateNotes'])->name('notes.update');
     });
 
+    Route::prefix('kasir')->name('kasir.')->middleware(['auth', 'role:kasir'])->group(function () {
+        Route::get('/dashboard', [kasirController::class, 'index'])->name('dashboard');
+        // Route::get('/orders/{order}/invoice', ...)->name('orders.invoice');
+    });
 
-    Route::middleware('admin')->group(function () {
+    Route::prefix('kitchen')->name('kitchen.')->middleware(['auth', 'role:staff_kitchen'])->group(function () {
+        Route::get('/dashboard', [kitchenController::class, 'kitchen'])->name('dashboard');
+    });
+
+
+    Route::middleware(['auth', 'role:admin,kasir,staff_kitchen'])->group(function () {
         Route::get('/admin/dashboard', [adminController::class, 'index'])->name('admin.dashboard.index');
         Route::get('/admin/menu', [adminController::class, 'menu'])->name('admin.dataMenu');
         Route::get('/admin/data-order', [adminController::class, 'dataOrder'])->name('admin.dataOrder');
@@ -66,10 +78,15 @@ Route::middleware('auth')->group(function () {
 
         // update status
         Route::put('/orders/{order}/status', [adminController::class, 'updateStatus'])->name('orders.updateStatus');
+        Route::delete('/orders/{order}', [adminController::class, 'destroy'])->name('orders.destroy');
 
         // print pdf
         Route::get('/admin/cetak-pdf', [AdminController::class, 'cetakpdf'])->name('admin.cetakpdf');
 
+        // print pdf kasir
+        Route::get('/order/{id}/invoice', [adminController::class, 'generateInvoice'])->name('order.invoice');
+
+        Route::get('/reports/download', [ReportController::class, 'generatePdf'])->name('reports.download');
     });
 });
 

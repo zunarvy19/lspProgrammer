@@ -29,11 +29,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if($request->user()->is_admin === 1){
-            return redirect('/admin/dashboard');
-        } else {
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
+        $user = $request->user();
+
+        switch ($user->role) {
+                case 'admin':
+                    return redirect('/admin/dashboard'); 
+                case 'kasir':
+                    return redirect()->route('kasir.dashboard');
+                case 'staff_kitchen':
+                    return redirect('/kitchen/dashboard'); 
+                default:
+                    return redirect()->intended(RouteServiceProvider::HOME); 
+            }
     }
 
     /**
